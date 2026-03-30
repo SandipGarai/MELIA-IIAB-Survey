@@ -1,3 +1,33 @@
+// CSS.escape polyfill — needed for older Android browsers and some WebViews
+if (typeof CSS === 'undefined' || typeof CSS.escape === 'undefined') {
+  if (typeof CSS === 'undefined') { window.CSS = {}; }
+  CSS.escape = function(value) {
+    var str = String(value);
+    var result = '';
+    for (var i = 0; i < str.length; i++) {
+      var char = str.charCodeAt(i);
+      if (char === 0) { result += '\uFFFD'; continue; }
+      if (char >= 0x0001 && char <= 0x001F || char === 0x007F ||
+          i === 0 && char >= 0x0030 && char <= 0x0039 ||
+          i === 1 && char >= 0x0030 && char <= 0x0039 &&
+          str.charCodeAt(0) === 0x002D) {
+        result += '\\' + char.toString(16) + ' '; continue;
+      }
+      if (i === 0 && char === 0x002D && str.length === 1) {
+        result += '\\' + str[i]; continue;
+      }
+      if (char >= 0x0080 || char === 0x002D || char === 0x005F ||
+          char >= 0x0030 && char <= 0x0039 ||
+          char >= 0x0041 && char <= 0x005A ||
+          char >= 0x0061 && char <= 0x007A) {
+        result += str[i]; continue;
+      }
+      result += '\\' + str[i];
+    }
+    return result;
+  };
+}
+
 /* ============================================================
    ICAR-IIAB Data Management Survey  —  form.js
    ============================================================ */
@@ -653,7 +683,8 @@ const DRAFT_KEY = 'icar_iiab_survey_draft';
 let autoSaveTimer = null;
 
 function initDraft() {
-  const saved = loadDraftFromStorage();
+  let saved = null;
+  try { saved = loadDraftFromStorage(); } catch(e) { saved = null; }
   if (saved) {
     setDraftStatus('saved', 'Draft found — restored from last session.');
     document.getElementById('btn-clear-draft').style.display = 'inline-block';
@@ -768,6 +799,7 @@ function loadDraftFromStorage() {
 }
 
 function restoreDraft(snap) {
+  try {
   // Respondent fields
   if (snap.name) document.getElementById('name-input').value = snap.name;
   if (snap.otherName) document.getElementById('other-name').value = snap.otherName;
@@ -842,6 +874,12 @@ function restoreDraft(snap) {
       if (el) el.value = snap.otherProjFunding;
     }
   }, 100);
+  } catch(err) {
+    // Draft restore failed (corrupted data) — clear it and start fresh
+    console.warn('Draft restore failed, clearing:', err);
+    localStorage.removeItem(DRAFT_KEY);
+    setDraftStatus('neutral', 'Previous draft was corrupted and has been cleared.');
+  }
 }
 
 // ── SUBMISSION RECEIPT ────────────────────────────────────
