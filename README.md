@@ -134,4 +134,4 @@ Dr. Sandip Garai
 Scientist and MELIA Nodal Officer  
 ICAR-Indian Institute of Agricultural Biotechnology  
 Garhkhatanga, Ranchi — 834010, Jharkhand  
-Email: estt.iiab@gmail.com
+Email: sandipnicksandy@gmail.com
