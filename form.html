@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ICAR-IIAB | Research Data Management Survey 2025-26</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ── HEADER ─────────────────────────────────────────────── -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-emblem">
+          <!-- Wheat/leaf SVG icon -->
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16 2C16 2 10 8 10 16C10 22 13 27 16 30C19 27 22 22 22 16C22 8 16 2 16 2Z"
+            />
+            <path
+              d="M8 10C8 10 4 13 4 18C4 22 6 25 8 27"
+              stroke-width="1.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+            />
+            <path
+              d="M24 10C24 10 28 13 28 18C28 22 26 25 24 27"
+              stroke-width="1.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>Research Data Management Survey</h1>
+          <p>
+            ICAR-Indian Institute of Agricultural Biotechnology, Ranchi &mdash;
+            MELIA Unit
+          </p>
+        </div>
+        <span class="header-tag">2025&ndash;26</span>
+      </div>
+    </header>
+
+    <!-- ── DRAFT BAR ──────────────────────────────────────────── -->
+    <div id="draft-bar">
+      <span id="draft-status">No draft saved yet.</span>
+      <button type="button" class="btn-draft" onclick="saveDraft()">
+        Save Draft
+      </button>
+      <button
+        type="button"
+        class="btn-draft btn-clear"
+        id="btn-clear-draft"
+        onclick="clearDraft()"
+        style="display: none"
+      >
+        Clear Draft
+      </button>
+    </div>
+
+    <!-- ── PAGE WRAPPER ───────────────────────────────────────── -->
+    <div class="page-wrap">
+      <p class="notice">
+        This survey is being conducted by <strong>Dr. Sandip Garai</strong>,
+        Scientist and MELIA Nodal Officer, ICAR-IIAB Ranchi, in accordance with
+        <strong>ICAR Data Policy 2025</strong>. Your responses will be used to
+        prepare the institute-level Data Management Report. Fields marked
+        <strong style="color: var(--red)">*</strong> are required.
+      </p>
+
+      <!-- ═══ MAIN FORM ════════════════════════════════════════ -->
+      <form id="main-form" novalidate>
+        <!-- SECTION 1: RESPONDENT ─────────────────────────────── -->
+        <div class="section-card">
+          <div class="section-head">
+            <span class="section-num">1</span>
+            <h2>Respondent Details</h2>
+          </div>
+          <div class="section-body">
+            <div class="field-group" id="fg-name">
+              <label class="field-label" for="name-input">
+                Name <span class="req">*</span>
+                <span class="field-hint">
+                  Type to search. Names of all ICAR-IIAB scientists are
+                  pre-loaded. If your name does not appear, use the link below
+                  to enter it manually.
+                </span>
+              </label>
+              <div class="autocomplete-wrap">
+                <input
+                  type="text"
+                  id="name-input"
+                  name="respondent_name"
+                  autocomplete="off"
+                  placeholder="Type your name..."
+                />
+                <div class="ac-dropdown" id="name-dropdown"></div>
+              </div>
+              <span class="other-name-link" onclick="toggleOtherName()">
+                Name not listed? Enter manually
+              </span>
+              <div id="other-name-wrap">
+                <input
+                  type="text"
+                  id="other-name"
+                  placeholder="Full name with designation, e.g. Dr. First Last"
+                />
+              </div>
+              <div class="field-error">Please enter your name.</div>
+            </div>
+
+            <div class="field-group" id="fg-email">
+              <label class="field-label" for="email">
+                Email Address <span class="req">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="yourname@icar.gov.in"
+              />
+              <div class="field-error">Please enter a valid email address.</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="designation"
+                >Designation <span class="req">*</span></label
+              >
+              <select id="designation" name="designation">
+                <option value="">Select designation</option>
+                <option>Principal Scientist</option>
+                <option>Senior Scientist</option>
+                <option>Scientist</option>
+                <option>Research Associate</option>
+                <option>SRF</option>
+                <option>JRF</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="role"
+                >Your role in the project</label
+              >
+              <select id="role" name="role">
+                <option value="">Select role</option>
+                <option>Principal Investigator (PI)</option>
+                <option>Co-PI</option>
+                <option>Associate / Collaborator</option>
+                <option>Project Scientist</option>
+                <option>SRF / JRF</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: PROJECT SELECTION ─────────────────────── -->
+        <div class="section-card">
+          <div class="section-head">
+            <span class="section-num">2</span>
+            <h2>Project Selection</h2>
+            <span class="section-sub">You may select multiple projects</span>
+          </div>
+          <div class="section-body">
+            <div class="field-group" id="fg-project">
+              <label class="field-label">
+                Select the project(s) you are providing information for
+                <span class="req">*</span>
+                <span class="field-hint">
+                  Filter by type or search by title or PI name. A separate data
+                  entry panel will appear below for each project you select.
+                </span>
+              </label>
+
+              <div class="filter-row">
+                <button
+                  type="button"
+                  class="filter-btn active"
+                  data-filter="ALL"
+                  onclick="filterProjects('ALL', this)"
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  class="filter-btn"
+                  data-filter="IP"
+                  onclick="filterProjects('IP', this)"
+                >
+                  Institute Projects
+                </button>
+                <button
+                  type="button"
+                  class="filter-btn"
+                  data-filter="EFP"
+                  onclick="filterProjects('EFP', this)"
+                >
+                  Externally Funded
+                </button>
+              </div>
+
+              <div class="proj-search-wrap">
+                <input
+                  type="text"
+                  id="proj-search"
+                  placeholder="Search by title or PI name..."
+                  oninput="searchProjects(this.value)"
+                />
+              </div>
+
+              <div id="project-list"></div>
+
+              <div id="selected-projects-summary"></div>
+
+              <div class="proj-other-option">
+                <label class="choice-item" style="margin-top: 10px">
+                  <input
+                    type="checkbox"
+                    id="other-proj-cb"
+                    onchange="toggleOtherProject(this)"
+                  />
+                  My project is not listed &mdash; I will describe it below
+                </label>
+              </div>
+
+              <div id="proj-other-fields">
+                <div class="field-group">
+                  <label class="field-label">Project Title</label>
+                  <input
+                    type="text"
+                    name="OTHER_proj_title"
+                    placeholder="Full project title"
+                  />
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Funding Agency</label>
+                  <input
+                    type="text"
+                    name="OTHER_proj_funding"
+                    placeholder="e.g. ICAR, DBT, ANRF, RKVY"
+                  />
+                </div>
+              </div>
+
+              <div class="field-error">Please select at least one project.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: METADATA REFERENCE ───────────────────── -->
+        <div class="section-card">
+          <div class="section-head">
+            <span class="section-num">3</span>
+            <h2>Reference: What is Metadata?</h2>
+            <span class="section-sub"
+              >Read before answering per-project questions</span
+            >
+          </div>
+          <div class="section-body">
+            <p
+              style="
+                font-size: 0.86rem;
+                color: var(--muted);
+                margin-bottom: 10px;
+              "
+            >
+              Metadata is information that describes your research data &mdash;
+              it ensures the data can be understood and reused in future. As per
+              ICAR Data Policy 2025, the following six dimensions of metadata
+              must be recorded.
+            </p>
+            <div class="example-box">
+              <div class="ex-label">
+                Example &mdash; Field experiment on rice, ICAR-IIAB Ranchi
+              </div>
+              <table>
+                <tr>
+                  <td>Who collected</td>
+                  <td>
+                    Dr. Sandip Garai, Scientist, ICAR-IIAB; assisted by SRF
+                    Ramesh Kumar
+                  </td>
+                </tr>
+                <tr>
+                  <td>When collected</td>
+                  <td>15 June 2025, Kharif season 2025</td>
+                </tr>
+                <tr>
+                  <td>Where collected</td>
+                  <td>
+                    GPS: 23.341&deg;N, 85.309&deg;E &mdash; Experimental Farm
+                    Block-3, ICAR-IIAB Ranchi
+                  </td>
+                </tr>
+                <tr>
+                  <td>What instrument</td>
+                  <td>
+                    SPAD-502 chlorophyll meter, calibrated 14 June 2025, serial
+                    no. 1234
+                  </td>
+                </tr>
+                <tr>
+                  <td>What was measured</td>
+                  <td>
+                    Leaf chlorophyll content (SPAD units) &mdash; 30 rice
+                    genotypes, 3 replications, RBD design
+                  </td>
+                </tr>
+                <tr>
+                  <td>Storage format</td>
+                  <td>
+                    Raw data in .xlsx; backed up on institute server and KRISHI
+                    Portal (accession: KRISHI-2025-IIAB-001)
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: PER-PROJECT DATA ENTRY (generated by JS) -->
+        <div id="project-forms-container"></div>
+
+        <!-- SECTION 5: GENERAL / CROSS-PROJECT ──────────────── -->
+        <div class="section-card">
+          <div class="section-head">
+            <span class="section-num">4</span>
+            <h2>General Suggestions</h2>
+            <span class="section-sub">Applies across all projects</span>
+          </div>
+          <div class="section-body">
+            <div class="field-group">
+              <label class="field-label" for="suggestions">
+                Suggestions for improving data management at ICAR-IIAB
+              </label>
+              <textarea
+                id="suggestions"
+                name="suggestions"
+                placeholder="e.g. Institute-level training, dedicated server, templates for data collection formats, KRISHI orientation..."
+              ></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="other-info">
+                Any other information for the MELIA Nodal Officer
+              </label>
+              <textarea
+                id="other-info"
+                name="other_info"
+                style="min-height: 70px"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBMIT ────────────────────────────────────────────── -->
+        <div class="submit-row" style="margin-top: 24px">
+          <button type="submit" class="btn-submit">Submit Response</button>
+        </div>
+      </form>
+
+      <!-- ═══ SUCCESS SCREEN ═══════════════════════════════════ -->
+      <div id="success-screen">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2>Response Submitted</h2>
+        <p>
+          Your data management information has been recorded successfully.<br />
+          For queries, contact <strong>Dr. Sandip Garai</strong>, MELIA Nodal
+          Officer, ICAR-IIAB, Ranchi.
+        </p>
+      </div>
+
+      <!-- ═══ RECEIPT SCREEN ════════════════════════════════════ -->
+      <div id="receipt-screen">
+        <div class="receipt-card">
+          <div class="receipt-header">
+            <h2>Submission Confirmation</h2>
+            <p>
+              ICAR-IIAB Research Data Management Survey 2025-26 &mdash; MELIA
+              Unit, Ranchi
+            </p>
+          </div>
+          <div class="receipt-body" id="receipt-body">
+            <!-- filled by form.js -->
+          </div>
+          <div class="receipt-actions">
+            <button
+              type="button"
+              class="btn-receipt btn-receipt-new"
+              onclick="window.location.reload()"
+            >
+              Submit Another Response
+            </button>
+            <button
+              type="button"
+              class="btn-receipt btn-receipt-print"
+              onclick="window.print()"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /page-wrap -->
+
+    <script src="data.js"></script>
+    <script src="form.js"></script>
+  </body>
+</html>
